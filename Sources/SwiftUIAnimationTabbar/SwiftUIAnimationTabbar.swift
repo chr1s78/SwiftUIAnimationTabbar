@@ -20,15 +20,23 @@ public struct SwiftUIAnimationTabbar: View {
     
     // Input Arguments
     var tabbarItem: [AnimationTabbarItem]
+    // background Color
+    var backgroundColor: Color
     
     // selected tab bar item name of String
     @Binding var selectedtab: String
     @State var xAxis: CGFloat = 0
     @Namespace var animation
     
-    public init(tabbarItem: [AnimationTabbarItem], selected: Binding<String>) {
+    public init(
+        tabbarItem: [AnimationTabbarItem],
+        backgroundColor: Color = Color.white.opacity(0.7),
+        selected: Binding<String>) {
+        
         self.tabbarItem = tabbarItem
         self._selectedtab = selected
+        self.backgroundColor = backgroundColor
+        
     }
     
     public var body: some View {
@@ -41,19 +49,17 @@ public struct SwiftUIAnimationTabbar: View {
                         withAnimation(.spring()) {
                             selectedtab = item.title
                             xAxis = reader.frame(in: .global).minX
-                            print("xAxis: \(xAxis)")
-                            print("geometry frame: \(reader.frame(in: .global))")
                         }
                     }, label: {
                         
-                        Image(systemName: item.imageDefault)
+                        Image(systemName: selectedtab == item.title ? item.imageFocus : item.imageDefault)
                             .resizable()
                             .renderingMode(.template)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 25, height: 25)
-                            .foregroundColor(selectedtab == item.title ? item.focusColor : item.color)
+                            .foregroundColor(selectedtab == item.title ? item.focusColor : item.unfoucsColor)
                             .padding(selectedtab == item.title ? 15 : 0)
-                            .background(Color.white.opacity(selectedtab == item.title ? 1 : 0) .clipShape(Circle()))
+                            .background(item.focusbkColor.opacity(selectedtab == item.title ? 1 : 0) .clipShape(Circle()))
                             .matchedGeometryEffect(id: item.title, in: animation)
                             .offset(x: selectedtab == item.title ? (reader.frame(in: .global).minX - reader.frame(in: .global).midX) : 0, y: selectedtab == item.title ? -50 : 0)
                         
@@ -71,7 +77,7 @@ public struct SwiftUIAnimationTabbar: View {
         }
         .padding(.horizontal, 30)
         .padding(.vertical)
-        .background(Color.white.clipShape(CustomTabShape(xAxis: xAxis)).cornerRadius(12))
+        .background(self.backgroundColor.clipShape(CustomTabShape(xAxis: xAxis)).cornerRadius(12))
         .padding(.horizontal)
         // Bottom Edge ...
         .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom)
