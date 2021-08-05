@@ -2,7 +2,7 @@
 
 Use KavSoft source code : SwiftUI 2.0 Animation Tab bar , I make it to a package
 
-![](https://s17.aconvert.com/convert/p3r68-cdx67/3bzdr-0mh7p.gif)
+![](https://s31.aconvert.com/convert/p3r68-cdx67/fsr5j-am3tp.gif)
 ### Usage:
 
 init some var
